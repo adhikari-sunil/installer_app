@@ -10,8 +10,6 @@ class Task(models.Model):
     address = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20)
 
-    # username = models.CharField(max_length=250)
-    # email = models.EmailField(max_length=50)
 
     def __str__(self):
         return self.assign_to

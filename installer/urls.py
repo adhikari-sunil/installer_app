@@ -9,7 +9,7 @@ router = DefaultRouter()
 
 urlpatterns = [
     path('', TaskAPIView.as_view(), name='task-list'),
-    path('products/', ProductListView.as_view(), name='product-view'),
+    path('products/', ProductAPIView.as_view(), name='product-view'),
     path('transactions/', TransactionAPIView.as_view(), name='transaction-list'),
     path('payments/', PaymentAPIView.as_view(), name='payment-list')
 ]

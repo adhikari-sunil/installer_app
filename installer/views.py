@@ -2,8 +2,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import  Task, Product, Transaction, Payment
-from .serializers import TaskSerializer, ProductSerializer, TransactionSerializer, PaymentSerializer
+from .models import *
+from .serializers import *
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.generics import ListCreateAPIView
@@ -26,21 +26,20 @@ class TaskAPIView(APIView):
 
 
 
-class ProductListView(ListCreateAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+class ProductAPIView(APIView):
 
-    def get(self, request, *args, **kwargs):
-        serializer = self.serializer_class(self.get_queryset(), many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request):
+        queryset = Product.objects.all()
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer.save()
-        headers = self.get_success_headers(serializer.data)  
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
 class TransactionAPIView(APIView):
     def get(self, request):
@@ -62,12 +61,12 @@ class PaymentAPIView(APIView):
 
 
     def get(self, request):
-        queryset = Transaction.objects.all()
-        serializer = TransactionSerializer(queryset, many=True)
+        queryset = Payment.objects.all()
+        serializer = PaymentSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = TransactionSerializer(data=request.data)
+        serializer = PaymentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
