@@ -1,4 +1,5 @@
 # views.py
+from ast import Param
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,10 +8,13 @@ from .serializers import *
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.generics import ListCreateAPIView
-
+from rest_framework import permissions
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class TaskAPIView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
     def get(self, request):
         employees = Task.objects.all()
         serializer = TaskSerializer(employees, many=True)
@@ -56,9 +60,6 @@ class TransactionAPIView(APIView):
 
 
 class PaymentAPIView(APIView):
-    # queryset = Payment.objects.all()
-    # serializer_class = PaymentSerializer
-
 
     def get(self, request):
         queryset = Payment.objects.all()
@@ -67,6 +68,25 @@ class PaymentAPIView(APIView):
 
     def post(self, request):
         serializer = PaymentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+# chat/views.py
+
+class MessageAPIView(APIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+
+    def get(self, request):
+        queryset = Message.objects.all()
+        serializer = MessageSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

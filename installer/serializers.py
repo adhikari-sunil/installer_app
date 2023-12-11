@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Payment, Product, Task, Transaction
+from .models import *
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,5 +24,9 @@ class PaymentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['sender', 'content', 'timestamp']
 
 

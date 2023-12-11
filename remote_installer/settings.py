@@ -15,6 +15,9 @@ from pathlib import Path
 from decouple import config
 import pymysql
 from django.core.management.commands import runserver
+import os
+
+
 
 
 pymysql.install_as_MySQLdb()
@@ -51,8 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'installer',
-    'rest_framework'
-
+    'rest_framework',
 
 
 ]
@@ -69,6 +71,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'remote_installer.urls'
 
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -84,6 +88,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'remote_installer.wsgi.application'
 
@@ -153,3 +159,11 @@ EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = config('EMAIL_PORT')
+
+
+
+# Actual directory user files go to
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
+
+# URL used to access the media
+MEDIA_URL = '/media/'
